@@ -6,6 +6,7 @@
 #include <QGraphicsPixmapItem>
 #include <QBrush>
 #include <QPainter>
+#include "defines.h"
 
 class Button : public QObject, public QGraphicsPixmapItem
 {

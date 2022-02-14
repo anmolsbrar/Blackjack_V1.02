@@ -13,24 +13,23 @@ SOURCES += \
     Buttons/controlbuttons.cpp \
     Buttons/playercontrols.cpp \
     Entity/dealer.cpp \
+    Entity/player.cpp \
     card.cpp \
     deck.cpp \
     gameboard.cpp \
-    main.cpp \
-    Entity/person.cpp \
-    Entity/player.cpp
+    main.cpp
 
 HEADERS += \
     Buttons/button.h \
     Buttons/controlbuttons.h \
     Buttons/playercontrols.h \
-    Defines.h \
+    defines.h \
     Entity/dealer.h \
+    Entity/player.h \
     card.h \
     deck.h \
     gameboard.h \
-    Entity/person.h \
-    Entity/player.h
+    Entity/person.h
 
 FORMS +=
 

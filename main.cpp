@@ -2,10 +2,10 @@
 
 #include "gameboard.h"
 #include "deck.h"
-#include "Entity/person.h"
+#include "Entity/player.h"
 
 GameBoard * board;
-Deck * Person::mDeck = new Deck(1);
+Deck * Player::mDeck = new Deck(1);
 
 int main(int argc, char *argv[])
 {

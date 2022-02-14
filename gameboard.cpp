@@ -15,12 +15,12 @@ void GameBoard::setLayout()
     QBrush brush(QPixmap(":/Images/Background.png"));
 
     scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,1280,720);
+    scene->setSceneRect(0,0,RES_X,RES_Y);
     scene->setBackgroundBrush(brush);
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFixedSize(1280,720);
+    setFixedSize(RES_X,RES_Y);
     mainMenu();
 
     this->setScene(scene);
@@ -28,8 +28,6 @@ void GameBoard::setLayout()
 
 void GameBoard::initPlayers()
 {
-    QString playerName = "Anmol";
-
     //User and player
     for(int i = 0; i < 3; i++)
     {
@@ -37,23 +35,32 @@ void GameBoard::initPlayers()
         {
             user = new Player(i);
             players.push_back(user);
-           // ctrl = new PlayerControl(nullptr);
+            //user->setPos(pPosMatrix[i][0], pPosMatrix[i][1]);
 
-           // scene->addWidget(ctrl);
-           // ctrl->move(pPosMatrix[i][0] + 10, pPosMatrix[i][1] + 170);
+            ctrl = new PlayerControls();
+            ctrl->enableCtrl(false);
+            scene->addItem(ctrl);
+
+
+            ctrl->setPos(pPosMatrix[i][0] + ENTITY_SIZE_X/2 - CTRL_SIZE_X/2, pPosMatrix[i][1] + ENTITY_SIZE_Y - CTRL_SIZE_Y);
+            ctrl->updateUI();
         }
         else
             players.push_back(new Player(i + 1));
 
+
+
         players[i]->setPos(pPosMatrix[i][0], pPosMatrix[i][1]);
+        players[i]->initializeUI();
         scene->addItem(players[i]);
     }
 
     //Dealer settings
     dealer = new Dealer();
     int x_dealer = this->width()/2 - dealer->boundingRect().width()/2;
-    int y_dealer = 100;
+    int y_dealer = 30;
     dealer->setPos(x_dealer, y_dealer);
+    dealer->initializeUI();
     players.push_back(dealer);
     scene->addItem(dealer);
 }
@@ -124,8 +131,8 @@ void GameBoard::playerMenu()
     Button * player3Button = new Button(Button::SEAT);
 
     //player1Button settings
-    float x_player1Button = 282.00;
-    float y_player1Button = 440.00;
+    float x_player1Button = PLAYER1_X;
+    float y_player1Button = PLAYER1_Y;
     player1Button->setPos(x_player1Button, y_player1Button);
     QObject::connect(player1Button, &Button::clicked, [=]{
         localPlayerPos = 0;
@@ -134,8 +141,8 @@ void GameBoard::playerMenu()
     scene->addItem(player1Button);
 
     //player2Button settings
-    float x_player2Button = 564.00;
-    float y_player2Button = 479.00;
+    float x_player2Button = PLAYER2_X;
+    float y_player2Button = PLAYER2_Y;
     player2Button->setPos(x_player2Button, y_player2Button);
     QObject::connect(player2Button, &Button::clicked, [=]{
         localPlayerPos = 1;
@@ -144,8 +151,8 @@ void GameBoard::playerMenu()
     scene->addItem(player2Button);
 
     //player3Button settings
-    float x_player3Button = 845.00;
-    float y_player3Button = 441.00;
+    float x_player3Button = PLAYER3_X;
+    float y_player3Button = PLAYER3_Y;
     player3Button->setPos(x_player3Button, y_player3Button);
     QObject::connect(player3Button, &Button::clicked, [=]{
         localPlayerPos = 2;
@@ -154,8 +161,8 @@ void GameBoard::playerMenu()
     scene->addItem(player3Button);
 
     //Exit button settings
-    int x_exitButton = 1170;
-    int y_exitButton = 30;
+    float x_exitButton = 1170.00;
+    float y_exitButton = 30.00;
     exitButton->setPos(x_exitButton, y_exitButton);
     QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
     scene->addItem(exitButton);
@@ -165,57 +172,9 @@ void GameBoard::startGameScreen()
 {
     scene->clear();
 
-    player1ScoreText = new QGraphicsTextItem();
-    player2ScoreText = new QGraphicsTextItem();
-    player3ScoreText = new QGraphicsTextItem();
-    dealerScoreText = new QGraphicsTextItem();
-    player1StateText = new QGraphicsTextItem();
-    player2StateText = new QGraphicsTextItem();
-    player3StateText = new QGraphicsTextItem();
-    dealerStateText = new QGraphicsTextItem();
     Button * exitButton = new Button(Button::EXIT);
 
-    ctrl = new PlayerControls();
-    ctrl->enableCtrl(false);
-    scene->addItem(ctrl);
-
     initPlayers(); // ****** initialize players ******
-
-    //sets state text position
-    player1StateText->setPos(players[0]->x() + players[0]->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, players[0]->y() - 30);
-    player2StateText->setPos(players[1]->x() + players[1]->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, players[1]->y() - 30);
-    player3StateText->setPos(players[2]->x() + players[2]->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, players[2]->y() - 30);
-    dealerStateText->setPos(players[3]->x() + players[3]->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, players[3]->y() - 30);
-
-    scene->addItem(player1ScoreText);
-    scene->addItem(player2ScoreText);
-    scene->addItem(player3ScoreText);
-    scene->addItem(dealerScoreText);
-
-    QFont titleFont("comic sans",20);
-    //player1ScoreText settings
-    player1ScoreText->setFont(titleFont);
-    player1ScoreText->setPlainText(QString::number(0));
-    player1ScoreText->setPos(players[0]->x() + players[0]->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, players[0]->y() + 200);
-    scene->addItem(player1ScoreText);
-
-    //player2ScoreText settings
-    player2ScoreText->setFont(titleFont);
-    player2ScoreText->setPlainText(QString::number(0));
-    player2ScoreText->setPos(players[1]->x() + players[1]->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, players[1]->y() + 200);
-    scene->addItem(player2ScoreText);
-
-    //player3ScoreText settings
-    player3ScoreText->setFont(titleFont);
-    player3ScoreText->setPlainText(QString::number(0));
-    player3ScoreText->setPos(players[2]->x() + players[2]->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, players[2]->y() + 200);
-    scene->addItem(player3ScoreText);
-
-    //dealerScoreText settings
-    dealerScoreText->setFont(titleFont);
-    dealerScoreText->setPlainText(QString::number(0));
-    dealerScoreText->setPos(dealer->x() + dealer->boundingRect().width()/2 - player1ScoreText->boundingRect().width()/2, dealer->y() - 30);
-    scene->addItem(dealerScoreText);
 
     //Exit button settings
     int x_exitButton = 1170;
@@ -226,10 +185,6 @@ void GameBoard::startGameScreen()
 
     QObject::connect(this, &GameBoard::stopGame, this, &GameBoard::restartGame);
 
-    QObject::connect(players[0], &Person::scorePing, player1ScoreText, &QGraphicsTextItem::setPlainText);
-    QObject::connect(players[1], &Person::scorePing, player2ScoreText, &QGraphicsTextItem::setPlainText);
-    QObject::connect(players[2], &Person::scorePing, player3ScoreText, &QGraphicsTextItem::setPlainText);
-    QObject::connect(players[3], &Person::scorePing, dealerScoreText, &QGraphicsTextItem::setPlainText);
 
     QObject::connect(ctrl->hitButton, &Button::clicked, [=]{
         user->hit();
@@ -262,16 +217,11 @@ void GameBoard::restartGame()
     int x_restartButton = this->width()/2 - restartButton->boundingRect().width()/2;
     int y_restartButton = this->height()/2 - restartButton->boundingRect().height()/2;
     restartButton->setPos(x_restartButton, y_restartButton);
-    QObject::connect(restartButton, &Button::clicked, this, &GameBoard::game);
+    QObject::connect(restartButton, &Button::clicked, [=]{
+        game();
+        scene->removeItem(restartButton);
+    });
     scene->addItem(restartButton);
-    /*
-    //Exit button settings
-    int x_exitButton = 720;
-    int y_exitButton = 10;
-    exitButton->setPos(x_exitButton, y_exitButton);
-    QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
-    scene->addItem(exitButton);
-    */
 }
 
 void GameBoard::gameLoop()
@@ -325,7 +275,7 @@ void GameBoard::gameLoop()
     }
 }
 
-void GameBoard::computerPlay(Person * player)
+void GameBoard::computerPlay(Player * player)
 {
     if(player->totalCount() < 17)
         player->hit();
@@ -338,7 +288,7 @@ void GameBoard::computerPlay(Person * player)
 }
 
 /*
-QString GameBoard::checkPlayerStatus(Person * player)
+QString GameBoard::checkPlayerStatus(Player * player)
 {
     int score = player->totalCount();
     if(score > 21)

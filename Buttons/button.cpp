@@ -85,5 +85,6 @@ Button::Button(ButtonType type, QGraphicsItem * parent) : QGraphicsPixmapItem(pa
 
 void Button::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    painter->setRenderHint(QPainter::Antialiasing, true);
     painter->drawPixmap(0, 0, size_x, size_y, *pix);
 }

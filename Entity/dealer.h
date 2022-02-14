@@ -1,10 +1,10 @@
 #ifndef DEALER_H
 #define DEALER_H
 
-#include "person.h"
+#include "player.h"
 #include "deck.h"
 
-class Dealer : public Person
+class Dealer : public Player
 {
 public:
     Dealer();
@@ -12,6 +12,7 @@ public:
     void shuffle();
     int upCardValue() const;
     int totalDealt() const;
+    void initializeUI() override;
 };
 
 #endif // DEALER_H

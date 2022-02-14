@@ -18,7 +18,7 @@ Card::Card(const QString & iFace, const QString & iSuit, int iValue, bool iAce, 
 
 void Card::setCard()
 {
-    this->setRect(0,0, 71, 96);
+    this->setRect(0,0, 71, 98);
 }
 
 QString Card::print() const
@@ -37,5 +37,10 @@ bool Card::isAce() const
 void Card::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPixmap pix(facePng);
-    painter->drawPixmap(0,0, 70, 100, pix);
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->drawPixmap(0,0, 70, 98, pix);
+    //QBrush brush = QBrush(pix);
+    //brush.setStyle(Qt::NoBrush);
+   // painter->setBrush(brush);
+    //painter->drawRoundedRect(this->boundingRect(), 3, 3);
 }

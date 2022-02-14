@@ -2,8 +2,8 @@
 
 ControlButtons::ControlButtons(ControlType type) : controlType(type)
 {
-    size_x = 30;
-    size_y = 30;
+    size_x = CTRL_BTN_SIZE_X;
+    size_y = CTRL_BTN_SIZE_Y;
 
     setButton();
 

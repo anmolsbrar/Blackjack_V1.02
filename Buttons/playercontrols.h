@@ -8,6 +8,7 @@
 
 
 #include <Buttons/controlbuttons.h>
+#include "defines.h"
 
 class PlayerControls : public QObject, public QGraphicsRectItem
 {
@@ -18,6 +19,7 @@ public:
     ControlButtons * standButton, * hitButton, * doubleButton;
     void enableCtrl(bool);
     void draw();
+    void updateUI();
 
 signals:
 

@@ -1,58 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Images/cards/0-1.bmp</file>
-        <file>Images/cards/0-2.bmp</file>
-        <file>Images/cards/0-3.bmp</file>
-        <file>Images/cards/0-4.bmp</file>
-        <file>Images/cards/0-5.bmp</file>
-        <file>Images/cards/0-6.bmp</file>
-        <file>Images/cards/0-7.bmp</file>
-        <file>Images/cards/0-8.bmp</file>
-        <file>Images/cards/0-9.bmp</file>
-        <file>Images/cards/0-10.bmp</file>
-        <file>Images/cards/0-11.bmp</file>
-        <file>Images/cards/0-12.bmp</file>
-        <file>Images/cards/0-13.bmp</file>
-        <file>Images/cards/1-1.bmp</file>
-        <file>Images/cards/1-2.bmp</file>
-        <file>Images/cards/1-3.bmp</file>
-        <file>Images/cards/1-4.bmp</file>
-        <file>Images/cards/1-5.bmp</file>
-        <file>Images/cards/1-6.bmp</file>
-        <file>Images/cards/1-7.bmp</file>
-        <file>Images/cards/1-8.bmp</file>
-        <file>Images/cards/1-9.bmp</file>
-        <file>Images/cards/1-10.bmp</file>
-        <file>Images/cards/1-11.bmp</file>
-        <file>Images/cards/1-12.bmp</file>
-        <file>Images/cards/1-13.bmp</file>
-        <file>Images/cards/2-1.bmp</file>
-        <file>Images/cards/2-2.bmp</file>
-        <file>Images/cards/2-3.bmp</file>
-        <file>Images/cards/2-4.bmp</file>
-        <file>Images/cards/2-5.bmp</file>
-        <file>Images/cards/2-6.bmp</file>
-        <file>Images/cards/2-7.bmp</file>
-        <file>Images/cards/2-8.bmp</file>
-        <file>Images/cards/2-9.bmp</file>
-        <file>Images/cards/2-10.bmp</file>
-        <file>Images/cards/2-11.bmp</file>
-        <file>Images/cards/2-12.bmp</file>
-        <file>Images/cards/2-13.bmp</file>
-        <file>Images/cards/3-1.bmp</file>
-        <file>Images/cards/3-2.bmp</file>
-        <file>Images/cards/3-3.bmp</file>
-        <file>Images/cards/3-4.bmp</file>
-        <file>Images/cards/3-5.bmp</file>
-        <file>Images/cards/3-6.bmp</file>
-        <file>Images/cards/3-7.bmp</file>
-        <file>Images/cards/3-8.bmp</file>
-        <file>Images/cards/3-9.bmp</file>
-        <file>Images/cards/3-10.bmp</file>
-        <file>Images/cards/3-11.bmp</file>
-        <file>Images/cards/3-12.bmp</file>
-        <file>Images/cards/3-13.bmp</file>
-        <file>Images/cards/joker.bmp</file>
         <file>Images/buttons/hitButtonActive.png</file>
         <file>Images/buttons/hitButtonGrey.png</file>
         <file>Images/buttons/hitButtonHover.png</file>
@@ -118,5 +65,11 @@
         <file>Images/cards/front-50.png</file>
         <file>Images/cards/front-51.png</file>
         <file>Images/cards/front-52.png</file>
+        <file>Images/buttons/standButtonActive.png</file>
+        <file>Images/buttons/standButtonGrey.png</file>
+        <file>Images/buttons/standButtonHover.png</file>
+        <file>Images/buttons/doubleButtonActive.png</file>
+        <file>Images/buttons/doubleButtonGrey.png</file>
+        <file>Images/buttons/doubleButtonHover.png</file>
     </qresource>
 </RCC>
