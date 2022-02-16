@@ -28,7 +28,7 @@
 #define STATUS_SIZE_Y 30
 
 //statusText POS from entity
-#define STATUS_OFFSET_X 4
+#define STATUS_OFFSET_X 100 //previously 4
 #define STATUS_OFFSET_Y 60
 
 //player control size

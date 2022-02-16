@@ -7,6 +7,7 @@ extern GameBoard * board;
 PlayerControls::PlayerControls(QGraphicsItem *parent) : QGraphicsRectItem(parent)
 {
     this->setRect(0,0, CTRL_SIZE_X, CTRL_SIZE_Y);
+    this->setOpacity(0.0);
 
     hitButton = new ControlButtons(ControlButtons::HIT);
     standButton = new ControlButtons(ControlButtons::STAND);
@@ -16,16 +17,9 @@ PlayerControls::PlayerControls(QGraphicsItem *parent) : QGraphicsRectItem(parent
     standButton->setParent(this);
     doubleButton->setParent(this);
 
-   // this->setPos()
     board->scene->addItem(hitButton);
     board->scene->addItem(standButton);
     board->scene->addItem(doubleButton);
-}
-
-
-void PlayerControls::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-   // painter->drawRoundedRect(this->boundingRect(), 20, 20);
 }
 
 void PlayerControls::enableCtrl(bool enable)

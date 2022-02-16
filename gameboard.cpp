@@ -1,14 +1,9 @@
 #include "gameboard.h"
-#include <QDebug>
-#include <Buttons/controlbuttons.h>
-#include "QPixmap"
 
 GameBoard::GameBoard(QGraphicsView * parent) : QGraphicsView(parent)
 {
     setLayout();
 }
-
-
 
 void GameBoard::setLayout()
 {
@@ -35,20 +30,16 @@ void GameBoard::initPlayers()
         {
             user = new Player(i);
             players.push_back(user);
-            //user->setPos(pPosMatrix[i][0], pPosMatrix[i][1]);
 
+            //Player control settings
             ctrl = new PlayerControls();
             ctrl->enableCtrl(false);
             scene->addItem(ctrl);
-
-
             ctrl->setPos(pPosMatrix[i][0] + ENTITY_SIZE_X/2 - CTRL_SIZE_X/2, pPosMatrix[i][1] + ENTITY_SIZE_Y - CTRL_SIZE_Y);
             ctrl->updateUI();
         }
         else
             players.push_back(new Player(i + 1));
-
-
 
         players[i]->setPos(pPosMatrix[i][0], pPosMatrix[i][1]);
         players[i]->initializeUI();
@@ -63,31 +54,6 @@ void GameBoard::initPlayers()
     dealer->initializeUI();
     players.push_back(dealer);
     scene->addItem(dealer);
-}
-
-void GameBoard::initialDraw()
-{
-    QTimer * timer = new QTimer();
-    int playerIndex = 0, currentTurn = 0;
-    int totalTurns = players.size() * 2 - 2;
-
-    QObject::connect(timer, &QTimer::timeout,[=]() mutable {
-        if(currentTurn >= totalTurns)
-        {
-            timer->stop();
-            emit startGame();
-        }
-
-        if(playerIndex > players.size() - 1)
-            playerIndex = 0;
-        players[playerIndex]->hit();
-        playerIndex++;
-        currentTurn++;
-    });
-
-    timer->setInterval(500);
-    timer->start();
-
 }
 
 void GameBoard::resetGame()
@@ -188,6 +154,7 @@ void GameBoard::startGameScreen()
 
     QObject::connect(ctrl->hitButton, &Button::clicked, [=]{
         user->hit();
+        checkHand(user);
     });
     QObject::connect(ctrl->standButton, &Button::clicked, [=]{
         gameClock->setInterval(200);
@@ -200,6 +167,7 @@ void GameBoard::startGameScreen()
 
 void GameBoard::game()
 {
+    dealer->shuffle();
     resetGame();
     gameClock = new QTimer();
 
@@ -211,7 +179,6 @@ void GameBoard::game()
 void GameBoard::restartGame()
 {
     Button * restartButton = new Button(Button::RESTART);
-    //ExitButton * exitButton = new ExitButton(QString("Exit"));
 
     //Retart Button settings
     int x_restartButton = this->width()/2 - restartButton->boundingRect().width()/2;
@@ -228,9 +195,6 @@ void GameBoard::gameLoop()
 {
     const static int totalInitRounds = players.size() * 2 - 2;
     static int currentRound = 0;
-
-    if((playerIndex > players.size() - 1) && state == START) //stops game after the final player(dealer)
-        state = END;
 
     if(state == INIT_DRAW)
     {
@@ -256,10 +220,13 @@ void GameBoard::gameLoop()
     {
         if(currentPlayer == user)
         {
+            user->setPlayerStatus(Player::PLAYING);
             gameClock->setInterval(3000);
             ctrl->enableCtrl(true);
             playerIndex++;
         }
+        else if(currentPlayer == dealer)
+            dealerPlay();
         else
         {
             ctrl->enableCtrl(false);
@@ -269,44 +236,73 @@ void GameBoard::gameLoop()
     }
     else if(state == END)
     {
+        determineWinner();
         gameClock->stop();
         currentRound = 0;
         emit stopGame();
     }
 }
 
+void GameBoard::checkHand(Player * player)
+{
+    int score = player->handValue();
+
+    if(score == 21 && player->drawCount() == 2)
+        player->setPlayerStatus(Player::BLACKJACK);
+    else if(score > 21)
+        player->setPlayerStatus(Player::BUST);
+    else if(score <= 21)
+        player->setPlayerStatus(Player::PLAYING);
+}
+
 void GameBoard::computerPlay(Player * player)
 {
-    if(player->totalCount() < 17)
+    if(player->handValue() < 17)
         player->hit();
     else
     {
         playerIndex++;
         gameClock->setInterval(600);
     }
+    checkHand(player);
 
 }
 
-/*
-QString GameBoard::checkPlayerStatus(Player * player)
+void GameBoard::determineWinner()
 {
-    int score = player->totalCount();
-    if(score > 21)
-        return "Bust";
-    else if(score == 21 && player->drawCount() < 3)
-        return "Blackjack!";
+    Player::PlayerStatus pStatus;
+    int playerScore;
+    int dealerScore = dealer->handValue();
 
-    if(player != dealer)
+    for(int i = 0; i < players.size() - 1; i++)
     {
-        if(score > dealer->totalCount())
-            return "Won";
-        else if (score == dealer->totalCount())
-            return "Push";
+        pStatus = players[i]->getPlayerStatus();
+        playerScore = players[i]->handValue();
+        if(pStatus == Player::BUST)
+            continue;
         else
-            return "Lost";
+        {
+            if(pStatus == Player::PLAYING)
+            {
+                if(playerScore > dealerScore)
+                    players[i]->setPlayerStatus(Player::WON);
+                else if(playerScore == dealerScore)
+                    players[i]->setPlayerStatus(Player::PUSH);
+                else
+                    players[i]->setPlayerStatus(Player::LOST);
+            }
+            else if(pStatus == Player::BLACKJACK && dealer->getPlayerStatus() == Player::BLACKJACK)
+                players[i]->setPlayerStatus(Player::PUSH);
+        }
     }
-    else
-        return "";
 }
-*/
 
+void GameBoard::dealerPlay()
+{
+    if(dealer->handValue() < 17)
+        dealer->hit();
+    else
+        state = END;
+
+    checkHand(dealer);
+}

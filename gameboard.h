@@ -1,20 +1,13 @@
-
-
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
-
 #define currentPlayer players[playerIndex]
 
-
-
 #include <QGraphicsView>
-#include <QPushButton>
 #include <QGraphicsItem>
 #include <QObject>
 #include <QVector>
 #include <QTimer>
-#include <QDebug>
 
 #include "Entity/player.h"
 #include "Entity/dealer.h"
@@ -31,8 +24,6 @@ private:
                                   {540, 350},
                                   {256, 304}};
     enum GameState {INIT_DRAW, START, END};
-    enum PlayerStatus {WON, LOST, BUST, PUSH, BLACKJACK};
-    bool finalTurn = false;
     int playerIndex;
     int localPlayerPos;
     QVector<Player *> players;
@@ -43,14 +34,14 @@ private:
     GameState state;
 
 public:
-
     explicit GameBoard(QGraphicsView *parent = nullptr);
     QGraphicsScene * scene;
     void setLayout();
     void initPlayers();
-    void initialDraw();
     void resetGame();
     void computerPlay(Player *);
+    void determineWinner();
+    void dealerPlay();
 
 public slots: 
     void mainMenu();
@@ -59,6 +50,7 @@ public slots:
     void game();
     void restartGame();
     void gameLoop();
+    void checkHand(Player *);
 
 signals:
     void startGame();

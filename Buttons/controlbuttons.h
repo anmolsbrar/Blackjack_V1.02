@@ -19,10 +19,12 @@ public:
     ControlButtons(ControlType);
     void setActive(bool);
     QPainterPath shape() const override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     ControlType controlType;
     void setButton();
+    bool isActive;
 
 signals:
 };

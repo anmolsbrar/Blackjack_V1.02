@@ -10,8 +10,6 @@ public:
     Dealer();
     ~Dealer();
     void shuffle();
-    int upCardValue() const;
-    int totalDealt() const;
     void initializeUI() override;
 };
 

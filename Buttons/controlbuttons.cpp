@@ -38,6 +38,7 @@ void ControlButtons::setButton()
 
 void ControlButtons::setActive(bool active)
 {
+    isActive = active;
     if(active)
     {
         pix->load(buttonDefault);
@@ -47,6 +48,7 @@ void ControlButtons::setActive(bool active)
     {
         pix->load(buttonInactive);
         setAcceptHoverEvents(false);
+
     }
     update();
 }
@@ -54,6 +56,12 @@ void ControlButtons::setActive(bool active)
 QPainterPath ControlButtons::shape() const
 {
     return path;
+}
+
+void ControlButtons::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(isActive)
+        emit clicked();
 }
 
 

@@ -16,7 +16,6 @@ public:
     Card(const QString&, const QString&, int, bool, QString);
 
     //public members
-    void setCard();
     QString print() const;
     int getValue() const;
     bool isAce() const;

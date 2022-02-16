@@ -25,7 +25,7 @@ QString Player::name() const
     return pName;
 }
 
-int Player::totalCount() const
+int Player::handValue() const
 {
     return totalHandValue;
 }
@@ -44,13 +44,14 @@ void Player::reset()
     for(Card * c : drawnCard)
         scene()->removeItem(c);
 
+    scene()->removeItem(statusText);
+
     drawnCard.clear();
 }
 
 void Player::initializeUI()
 {
     QFont titleFont("comic sans",20);
-
 
     scoreText = new QGraphicsTextItem();
     scoreText->setFont(titleFont);
@@ -62,7 +63,6 @@ void Player::initializeUI()
     statusText->setFont(titleFont);
     statusText->setPlainText("STATUS");
     statusText->setPos(this->x() + STATUS_OFFSET_X, this->y() + STATUS_OFFSET_Y);
-    board->scene->addItem(statusText);
 }
 
 void Player::addValue(const Card * hCard)
@@ -110,8 +110,6 @@ void Player::hit()
     updateUI();
 
     scene()->addItem(hCard);
-
-
 }
 
 void Player::updateUI()
@@ -119,4 +117,25 @@ void Player::updateUI()
     scoreText->setPlainText(QString::number(totalHandValue));
 }
 
+void Player::setPlayerStatus(PlayerStatus status)
+{
+    playerStatus = status;
+    if(playerStatus == BLACKJACK)
+        statusText->setPlainText("Blackjack");
+    else if(playerStatus == PUSH)
+        statusText->setPlainText("Push");
+    else if(playerStatus == BUST)
+        statusText->setPlainText("Bust");
+    else if(playerStatus == WON)
+        statusText->setPlainText("WON");
+    else if(playerStatus == LOST)
+        statusText->setPlainText("Lost");
 
+    if(playerStatus != PLAYING)
+        board->scene->addItem(statusText);
+}
+
+Player::PlayerStatus Player::getPlayerStatus() const
+{
+   return playerStatus;
+}

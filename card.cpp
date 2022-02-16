@@ -6,20 +6,15 @@
 Card::Card():
     face("Joker"), suit("Joker"), ace(false), value(0),  facePng(":/images/cards/joker.bmp")
 {
-    this->setCard();
+    this->setRect(0,0, 71, 98);
 }
 
 Card::Card(const QString & iFace, const QString & iSuit, int iValue, bool iAce, QString iPix) :
     face(iFace), suit(iSuit), ace(iAce), value(iValue), facePng(iPix)
 {
-    this->setCard();
-}
-
-
-void Card::setCard()
-{
     this->setRect(0,0, 71, 98);
 }
+
 
 QString Card::print() const
 {
