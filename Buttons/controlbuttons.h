@@ -6,7 +6,6 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
-
 #include <Buttons/button.h>
 
 class ControlButtons : public Button

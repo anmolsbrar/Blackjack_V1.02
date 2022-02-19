@@ -34,7 +34,6 @@ Deck::Deck(int deckCount)
                 }
                 QString str(":/Images/cards/front-");
                 str.append(QString::number((cardCount * i + cardCount)) + ".png");
-                qDebug() << str;
                 deck.push_back(new Card(dFaces[cardCount % 13], dSuits[cardCount / 13], cValue, isAce, str));
             }
         }

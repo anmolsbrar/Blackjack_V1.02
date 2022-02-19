@@ -5,9 +5,13 @@
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QGraphicsBlurEffect>
+#include <QPixmap>
+#include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QVector>
 #include <QTimer>
+#include <QLabel>
 
 #include "Entity/player.h"
 #include "Entity/dealer.h"
@@ -20,6 +24,7 @@ class GameBoard : public QGraphicsView
 {
     Q_OBJECT
 private:
+
     const int pPosMatrix[3][2] = {{820, 310},
                                   {540, 350},
                                   {256, 304}};

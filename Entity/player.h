@@ -9,6 +9,7 @@
 #include "card.h"
 #include "deck.h"
 #include "defines.h"
+#include "Misc/statusimage.h"
 
 
 class Player : public QObject, public QGraphicsRectItem
@@ -17,11 +18,9 @@ class Player : public QObject, public QGraphicsRectItem
 private:
     int aceCount = 0;
     void addValue(const Card *);
-
     QVector<Card *> drawnCard;
 
 public:
-    enum PlayerStatus {WON, LOST, BUST, PUSH, BLACKJACK, PLAYING};
     Player(QGraphicsItem * parent = nullptr);
     Player(int, QGraphicsItem * parent = nullptr);
     ~Player();
@@ -39,15 +38,13 @@ protected:
     int totalCardsDrawn = 0;
     int totalHandValue = 0;
     static Deck * mDeck;
-
+    StatusImage * statusImg;
     QGraphicsTextItem * scoreText;
-    QGraphicsTextItem * statusText;
     PlayerStatus playerStatus;
 
 public slots:
     void hit();
 
-signals:
 };
 
 #endif // PLAYER_H

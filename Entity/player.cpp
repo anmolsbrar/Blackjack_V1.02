@@ -7,12 +7,14 @@ Player::Player(QGraphicsItem *parent) :
     QGraphicsRectItem(parent)
 {
     this->setRect(0, 0, ENTITY_SIZE_X, ENTITY_SIZE_Y);
+    this->setOpacity(0.0);
 }
 
 Player::Player(int num, QGraphicsItem *parent) :
     QGraphicsRectItem(parent), pName("Player_" + QString::number(num))
 {
     this->setRect(0,0, ENTITY_SIZE_X, ENTITY_SIZE_Y);
+    this->setOpacity(0.0);
 
 }
 
@@ -44,25 +46,25 @@ void Player::reset()
     for(Card * c : drawnCard)
         scene()->removeItem(c);
 
-    scene()->removeItem(statusText);
+    scene()->removeItem(statusImg);
 
     drawnCard.clear();
 }
 
 void Player::initializeUI()
 {
-    QFont titleFont("comic sans",20);
+    QFont titleFont("Century Gothic",12);
+    titleFont.setBold(true);
 
     scoreText = new QGraphicsTextItem();
+    scoreText->setDefaultTextColor(Qt::white);
     scoreText->setFont(titleFont);
     scoreText->setPlainText(QString::number(totalHandValue));
     scoreText->setPos(this->x() + SCORE_OFFSET_X, this->y() + SCORE_OFFSET_Y);
     board->scene->addItem(scoreText);
 
-    statusText = new QGraphicsTextItem();
-    statusText->setFont(titleFont);
-    statusText->setPlainText("STATUS");
-    statusText->setPos(this->x() + STATUS_OFFSET_X, this->y() + STATUS_OFFSET_Y);
+    statusImg = new StatusImage();
+    statusImg->setPos(this->x() + STATUS_OFFSET_X, this->y() + STATUS_OFFSET_Y);
 }
 
 void Player::addValue(const Card * hCard)
@@ -120,22 +122,27 @@ void Player::updateUI()
 void Player::setPlayerStatus(PlayerStatus status)
 {
     playerStatus = status;
+
     if(playerStatus == BLACKJACK)
-        statusText->setPlainText("Blackjack");
+    {
+        statusImg->setStatusImage(BLACKJACK);
+        statusImg->moveBy(-10, 0);
+    }
     else if(playerStatus == PUSH)
-        statusText->setPlainText("Push");
+        statusImg->setStatusImage(PUSH);
     else if(playerStatus == BUST)
-        statusText->setPlainText("Bust");
+        statusImg->setStatusImage(BUST);
     else if(playerStatus == WON)
-        statusText->setPlainText("WON");
+        statusImg->setStatusImage(WON);
     else if(playerStatus == LOST)
-        statusText->setPlainText("Lost");
+        statusImg->setStatusImage(LOST);
 
     if(playerStatus != PLAYING)
-        board->scene->addItem(statusText);
+        board->scene->addItem(statusImg);
+
 }
 
-Player::PlayerStatus Player::getPlayerStatus() const
+PlayerStatus Player::getPlayerStatus() const
 {
    return playerStatus;
 }

@@ -7,10 +7,10 @@ GameBoard::GameBoard(QGraphicsView * parent) : QGraphicsView(parent)
 
 void GameBoard::setLayout()
 {
-    QBrush brush(QPixmap(":/Images/Background.png"));
-
     scene = new QGraphicsScene();
     scene->setSceneRect(0,0,RES_X,RES_Y);
+
+    QBrush brush(QPixmap(":/Images/Background.png"));
     scene->setBackgroundBrush(brush);
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -80,8 +80,8 @@ void GameBoard::mainMenu()
     scene->addItem(startButton);
 
     //Exit button settings
-    int x_exitButton = 1170;
-    int y_exitButton = 30;
+    int x_exitButton = EXIT_BTN_X;
+    int y_exitButton = EXIT_BTN_Y;
     exitButton->setPos(x_exitButton, y_exitButton);
     QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
     scene->addItem(exitButton);
@@ -127,8 +127,8 @@ void GameBoard::playerMenu()
     scene->addItem(player3Button);
 
     //Exit button settings
-    float x_exitButton = 1170.00;
-    float y_exitButton = 30.00;
+    int x_exitButton = EXIT_BTN_X;
+    int y_exitButton = EXIT_BTN_Y;
     exitButton->setPos(x_exitButton, y_exitButton);
     QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
     scene->addItem(exitButton);
@@ -143,8 +143,8 @@ void GameBoard::startGameScreen()
     initPlayers(); // ****** initialize players ******
 
     //Exit button settings
-    int x_exitButton = 1170;
-    int y_exitButton = 30;
+    int x_exitButton = EXIT_BTN_X;
+    int y_exitButton = EXIT_BTN_Y;
     exitButton->setPos(x_exitButton, y_exitButton);
     QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
     scene->addItem(exitButton);
@@ -160,7 +160,6 @@ void GameBoard::startGameScreen()
         gameClock->setInterval(200);
         ctrl->enableCtrl(false);
     });
-
 
     game();
 }
@@ -182,7 +181,7 @@ void GameBoard::restartGame()
 
     //Retart Button settings
     int x_restartButton = this->width()/2 - restartButton->boundingRect().width()/2;
-    int y_restartButton = this->height()/2 - restartButton->boundingRect().height()/2;
+    int y_restartButton = 230;
     restartButton->setPos(x_restartButton, y_restartButton);
     QObject::connect(restartButton, &Button::clicked, [=]{
         game();
@@ -195,6 +194,8 @@ void GameBoard::gameLoop()
 {
     const static int totalInitRounds = players.size() * 2 - 2;
     static int currentRound = 0;
+
+   // if(Player::mDeck)
 
     if(state == INIT_DRAW)
     {
@@ -220,7 +221,7 @@ void GameBoard::gameLoop()
     {
         if(currentPlayer == user)
         {
-            user->setPlayerStatus(Player::PLAYING);
+            user->setPlayerStatus(PLAYING);
             gameClock->setInterval(3000);
             ctrl->enableCtrl(true);
             playerIndex++;
@@ -248,11 +249,11 @@ void GameBoard::checkHand(Player * player)
     int score = player->handValue();
 
     if(score == 21 && player->drawCount() == 2)
-        player->setPlayerStatus(Player::BLACKJACK);
+        player->setPlayerStatus(BLACKJACK);
     else if(score > 21)
-        player->setPlayerStatus(Player::BUST);
+        player->setPlayerStatus(BUST);
     else if(score <= 21)
-        player->setPlayerStatus(Player::PLAYING);
+        player->setPlayerStatus(PLAYING);
 }
 
 void GameBoard::computerPlay(Player * player)
@@ -265,12 +266,11 @@ void GameBoard::computerPlay(Player * player)
         gameClock->setInterval(600);
     }
     checkHand(player);
-
 }
 
 void GameBoard::determineWinner()
 {
-    Player::PlayerStatus pStatus;
+    PlayerStatus pStatus;
     int playerScore;
     int dealerScore = dealer->handValue();
 
@@ -278,21 +278,27 @@ void GameBoard::determineWinner()
     {
         pStatus = players[i]->getPlayerStatus();
         playerScore = players[i]->handValue();
-        if(pStatus == Player::BUST)
+        if(pStatus == BUST)
             continue;
         else
         {
-            if(pStatus == Player::PLAYING)
+            if(pStatus == PLAYING)
             {
+                if(dealer->getPlayerStatus() == BUST)
+                {
+                    players[i]->setPlayerStatus(WON);
+                    continue;
+                }
+
                 if(playerScore > dealerScore)
-                    players[i]->setPlayerStatus(Player::WON);
+                    players[i]->setPlayerStatus(WON);
                 else if(playerScore == dealerScore)
-                    players[i]->setPlayerStatus(Player::PUSH);
+                    players[i]->setPlayerStatus(PUSH);
                 else
-                    players[i]->setPlayerStatus(Player::LOST);
+                    players[i]->setPlayerStatus(LOST);
             }
-            else if(pStatus == Player::BLACKJACK && dealer->getPlayerStatus() == Player::BLACKJACK)
-                players[i]->setPlayerStatus(Player::PUSH);
+            else if(pStatus == BLACKJACK && dealer->getPlayerStatus() == BLACKJACK)
+                players[i]->setPlayerStatus(PUSH);
         }
     }
 }

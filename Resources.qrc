@@ -71,5 +71,9 @@
         <file>Images/buttons/doubleButtonActive.png</file>
         <file>Images/buttons/doubleButtonGrey.png</file>
         <file>Images/buttons/doubleButtonHover.png</file>
+        <file>Images/status/statusBlackjack.png</file>
+        <file>Images/status/statusBust.png</file>
+        <file>Images/status/statusWinner.png</file>
+        <file>Images/status/statusLost.png</file>
     </qresource>
 </RCC>

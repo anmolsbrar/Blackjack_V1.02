@@ -1,6 +1,10 @@
 #include "button.h"
 #include <QDebug>
 
+Button::Button(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
+{
+}
+
 void Button::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     emit clicked();
@@ -26,8 +30,8 @@ QPainterPath Button::shape() const
 
 void Button::StartSettings()
 {
-    size_x = 120;
-    size_y = 53;
+    size_x = 200;
+    size_y = 88;
     path.addRect(0, 0, size_x, size_y);
     buttonDefault = ":Images/buttons/StartButtonDefault.png";
     buttonHover = ":Images/buttons/StartButtonHover.png";
@@ -54,16 +58,12 @@ void Button::SeatSettings()
 
 void Button::RestartSettings()
 {
-    size_x = 160;
-    size_y = 51;
+    size_x = 276;
+    size_y = 88;
     path.addRect(0,0, size_x, size_y);
     buttonDefault = ":Images/buttons/RestartButtonDefault.png";
     buttonHover = ":Images/buttons/RestartButtonHover.png";
 
-}
-
-Button::Button(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
-{
 }
 
 Button::Button(ButtonType type, QGraphicsItem * parent) : QGraphicsPixmapItem(parent)
