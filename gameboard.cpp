@@ -68,7 +68,10 @@ void GameBoard::resetGame()
 void GameBoard::mainMenu()
 {
     Button * startButton = new Button(Button::START);
-    Button * exitButton = new Button(Button::EXIT);
+
+    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0, 1280, 720);
+    QBrush brush(blurPix(QPixmap(":/Images/Background.png")));
+    rect->setBrush(brush);
 
     scene->clear();
 
@@ -79,19 +82,13 @@ void GameBoard::mainMenu()
     QObject::connect(startButton, &Button::clicked, this, &GameBoard::playerMenu);
     scene->addItem(startButton);
 
-    //Exit button settings
-    int x_exitButton = EXIT_BTN_X;
-    int y_exitButton = EXIT_BTN_Y;
-    exitButton->setPos(x_exitButton, y_exitButton);
-    QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
-    scene->addItem(exitButton);
+    exitButton();
 }
 
 void GameBoard::playerMenu()
 {
     scene->clear();
 
-    Button * exitButton = new Button(Button::EXIT);
     Button * player1Button = new Button(Button::SEAT);
     Button * player2Button = new Button(Button::SEAT);
     Button * player3Button = new Button(Button::SEAT);
@@ -124,30 +121,19 @@ void GameBoard::playerMenu()
         localPlayerPos = 2;
         startGameScreen();
     });
-    scene->addItem(player3Button);
+    //exit Button
+    exitButton();
 
-    //Exit button settings
-    int x_exitButton = EXIT_BTN_X;
-    int y_exitButton = EXIT_BTN_Y;
-    exitButton->setPos(x_exitButton, y_exitButton);
-    QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
-    scene->addItem(exitButton);
+    scene->addItem(player3Button);
 }
 
 void GameBoard::startGameScreen()
 {
     scene->clear();
 
-    Button * exitButton = new Button(Button::EXIT);
+    exitButton();
 
     initPlayers(); // ****** initialize players ******
-
-    //Exit button settings
-    int x_exitButton = EXIT_BTN_X;
-    int y_exitButton = EXIT_BTN_Y;
-    exitButton->setPos(x_exitButton, y_exitButton);
-    QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
-    scene->addItem(exitButton);
 
     QObject::connect(this, &GameBoard::stopGame, this, &GameBoard::restartGame);
 
@@ -311,4 +297,35 @@ void GameBoard::dealerPlay()
         state = END;
 
     checkHand(dealer);
+}
+
+void GameBoard::exitButton()
+{
+    Button * exitButton = new Button(Button::EXIT);
+    //Exit button settings
+    int x_exitButton = EXIT_BTN_X;
+    int y_exitButton = EXIT_BTN_Y;
+    exitButton->setPos(x_exitButton, y_exitButton);
+    QObject::connect(exitButton, &Button::clicked, this, &GameBoard::close);
+    scene->addItem(exitButton);
+}
+
+QPixmap GameBoard::blurPix(const QPixmap & inImg)
+{
+    QLabel * label = new QLabel();
+    //label->setBaseSize(1280, 720);
+    label->setPixmap(inImg);
+
+    QGraphicsBlurEffect blur;
+    blur.setBlurHints(QGraphicsBlurEffect::QualityHint);
+    blur.setBlurRadius(3);
+
+    label->setGraphicsEffect(&blur);
+
+    QPixmap outImg(1280, 720);
+    QPainter painter(&outImg);
+    painter.end();
+    label->render(&outImg, QPoint(0,0), QRegion(0,0,1280,720, QRegion::Rectangle));
+
+    return outImg;
 }

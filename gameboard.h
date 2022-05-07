@@ -47,6 +47,8 @@ public:
     void computerPlay(Player *);
     void determineWinner();
     void dealerPlay();
+    void exitButton();
+    QPixmap blurPix(const QPixmap&);
 
 public slots: 
     void mainMenu();
